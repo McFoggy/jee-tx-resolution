@@ -1,4 +1,4 @@
-package fr.brouillard.oss.jee.tx;
+package fr.brouillard.oss.jee.tx.ejb;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -15,6 +15,10 @@ import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import fr.brouillard.oss.jee.tx.TCT;
+import fr.brouillard.oss.jee.tx.TxChecker;
+import fr.brouillard.oss.jee.tx.TxCheckerType;
 
 @RunWith(Arquillian.class)
 public class EJBsIntegrationTest  {

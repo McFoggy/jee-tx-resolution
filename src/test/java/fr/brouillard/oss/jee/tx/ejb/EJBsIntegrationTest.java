@@ -22,7 +22,26 @@ import fr.brouillard.oss.jee.tx.TxCheckerType;
 
 @RunWith(Arquillian.class)
 public class EJBsIntegrationTest  {
-    // BASE TX
+    // BASE NO TX
+    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX)
+    TxChecker baseNoTx;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_NO_OVERRIDE_TX_CLASS_EXPLICIT)
+    TxChecker baseNoTxchildTxOnClassNoOverride;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_OVERRIDE_TX_CLASS_EXPLICIT)
+    TxChecker baseNoTxchildTxOnClassSuperOverride;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_NO_OVERRIDE_DEFAULTS)
+    TxChecker baseNoTxChildSuperNoOverrideDefaults;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_OVERRIDE_DEFAULTS)
+    TxChecker baseNoTxChildSuperOverrideDefaults;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_OVERRIDE_TX_METHODS_EXPLICIT)
+    TxChecker baseNoTxChildOverrideTxMethodsExplicit;
+
+    // BASE TX CLASS
     @Inject @TCT(TxCheckerType.EJB_BASE_TX_CLASS_EXPLICIT)
     TxChecker baseTxClassExplicit;
 
@@ -41,24 +60,24 @@ public class EJBsIntegrationTest  {
     @Inject @TCT(TxCheckerType.EJB_BASE_TX_CLASS_EXPLICIT_OVERRIDE_NO_TX_METHOD)
     TxChecker baseTxClassExplicitOverrideNoTxMethod;
 
-    // BASE NO TX
-    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX)
-    TxChecker baseNoTx;
-    
-    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_NO_OVERRIDE_TX_CLASS_EXPLICIT)
-    TxChecker baseNoTxchildTxOnClassNoOverride;
-    
-    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_OVERRIDE_TX_CLASS_EXPLICIT)
-    TxChecker baseNoTxchildTxOnClassSuperOverride;
+    // BASE TX METHOD
+    @Inject @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT)
+    TxChecker baseTxMethodExplicit;
 
-    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_NO_OVERRIDE_DEFAULTS)
-    TxChecker baseNoTxChildSuperNoOverrideDefaults;
-    
-    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_OVERRIDE_DEFAULTS)
-    TxChecker baseNoTxChildSuperOverrideDefaults;
-    
-    @Inject @TCT(TxCheckerType.EJB_BASE_NO_TX_CHILD_OVERRIDE_TX_METHODS_EXPLICIT)
-    TxChecker baseNoTxChildOverrideTxMethodsExplicit;
+    @Inject @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_DEFAULTS)
+    TxChecker baseTxMethodExplicitNoOverrideDefaults;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_NO_TX_CLASS)
+    TxChecker baseTxMethodExplicitNoOverrideNoTxClass;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_DEFAULTS)
+    TxChecker baseTxMethodExplicitOverrideDefaults;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_CLASS)
+    TxChecker baseTxMethodExplicitOverrideNoTxClass;
+
+    @Inject @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_METHOD)
+    TxChecker baseTxMethodExplicitOverrideNoTxMethod;
 
     @Deployment
     public static WebArchive createDeployment() {
@@ -131,7 +150,38 @@ public class EJBsIntegrationTest  {
     public void test_base_tx_explicit_override_no_tx_methods() {
         testTransactionStates(TxCheckerType.EJB_BASE_TX_CLASS_EXPLICIT_OVERRIDE_NO_TX_METHOD.name(), baseTxClassExplicitOverrideNoTxMethod, false);
     }
-    
+
+
+    @Test
+    public void test_base_tx_method_explicit() {
+        testTransactionStates(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT.name(), baseTxMethodExplicit, true);
+    }
+
+    @Test
+    public void test_base_tx_method_explicit_no_override_defaults() {
+        testTransactionStates(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_DEFAULTS.name(), baseTxMethodExplicitNoOverrideDefaults, true);
+    }
+
+    @Test
+    public void test_base_tx_method_explicit_no_override_no_tx_class() {
+        testTransactionStates(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_NO_TX_CLASS.name(), baseTxMethodExplicitNoOverrideNoTxClass, true);
+    }
+
+    @Test
+    public void test_base_tx_method_explicit_override_defaults() {
+        testTransactionStates(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_DEFAULTS.name(), baseTxMethodExplicitOverrideDefaults, false);
+    }
+
+    @Test
+    public void test_base_tx_method_explicit_override_no_tx_class() {
+        testTransactionStates(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_CLASS.name(), baseTxMethodExplicitOverrideNoTxClass, false);
+    }
+
+    @Test
+    public void test_base_tx_method_explicit_override_no_tx_methods() {
+        testTransactionStates(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_METHOD.name(), baseTxMethodExplicitOverrideNoTxMethod, false);
+    }
+
     private void testTransactionStates(String caller, TxChecker txChecker, boolean txStateForMethod) {
         assertThat(caller + "::method transaction state is wrong", txChecker.method(caller), is(txStateForMethod));
     }

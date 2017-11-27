@@ -6,5 +6,5 @@ import javax.ejb.TransactionAttributeType;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-public class ChildTxClassExplicitEJBNoOverrideNoTxClass extends BaseTxClassExplicit {
+public class ChildTxClassExplicitEJBNoOverrideNoTxClass extends BaseEJBTxClassExplicit {
 }

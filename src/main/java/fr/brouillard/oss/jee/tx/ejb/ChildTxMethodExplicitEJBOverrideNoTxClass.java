@@ -6,7 +6,7 @@ import javax.ejb.TransactionAttributeType;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-public class ChildTxClassExplicitEJBOverrideNoTxClass extends BaseEJBTxClassExplicit {
+public class ChildTxMethodExplicitEJBOverrideNoTxClass extends BaseEJBTxMethodExplicit {
     @Override
     public boolean method(String caller) {
         return super.method(caller);

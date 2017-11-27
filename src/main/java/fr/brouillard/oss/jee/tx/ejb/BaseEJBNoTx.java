@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 import fr.brouillard.oss.jee.tx.JTAStatus;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRED)
-public class BaseTxClassExplicit implements fr.brouillard.oss.jee.tx.TxChecker {
-    private final static Logger LOGGER = LoggerFactory.getLogger(BaseTxClassExplicit.class);
+@TransactionAttribute(TransactionAttributeType.SUPPORTS)
+public class BaseEJBNoTx implements fr.brouillard.oss.jee.tx.TxChecker {
+    private final static Logger LOGGER = LoggerFactory.getLogger(BaseEJBNoTx.class);
     
     @Resource
     TransactionSynchronizationRegistry tsr;

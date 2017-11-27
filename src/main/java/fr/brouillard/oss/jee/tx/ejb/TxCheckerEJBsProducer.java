@@ -5,7 +5,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
 
 import fr.brouillard.oss.jee.tx.TCT;
 import fr.brouillard.oss.jee.tx.TxChecker;
@@ -14,7 +13,7 @@ import fr.brouillard.oss.jee.tx.TxCheckerType;
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)  // do not influence Tx
 public class TxCheckerEJBsProducer {
-    @EJB(lookup = "java:app/tx-ejb/BaseNoTx")
+    @EJB(lookup = "java:app/tx-ejb/BaseEJBNoTx")
     TxChecker baseNoTx;
     @EJB(lookup = "java:app/tx-ejb/ChildNoTxEJBNoOverrideTxOnClassExplicit")
     TxChecker baseNoTxNoOverrideTxClassExplicit;
@@ -27,7 +26,7 @@ public class TxCheckerEJBsProducer {
     @EJB(lookup = "java:app/tx-ejb/ChildNoTxEJBOverrideTxOnMethodsExplicit")
     TxChecker baseNoTxOverrideTxMethods;
     
-    @EJB(lookup = "java:app/tx-ejb/BaseTxClassExplicit")
+    @EJB(lookup = "java:app/tx-ejb/BaseEJBTxClassExplicit")
     TxChecker baseTx;
     @EJB(lookup = "java:app/tx-ejb/ChildTxClassExplicitEJBNoOverrideDefaults")
     TxChecker baseTxNoOverrideDefaults;
@@ -40,6 +39,20 @@ public class TxCheckerEJBsProducer {
     @EJB(lookup = "java:app/tx-ejb/ChildTxClassExplicitEJBOverrideNoTxMethods")
     TxChecker baseTxOverrideNoTxMethods;
 
+
+    @EJB(lookup = "java:app/tx-ejb/BaseEJBTxMethodExplicit")
+    TxChecker baseTxMethod;
+    @EJB(lookup = "java:app/tx-ejb/ChildTxMethodExplicitEJBNoOverrideDefaults")
+    TxChecker baseTxMethodNoOverrideDefaults;
+    @EJB(lookup = "java:app/tx-ejb/ChildTxMethodExplicitEJBNoOverrideNoTxClass")
+    TxChecker baseTxMethodNoOverrideNoTxClass;
+    @EJB(lookup = "java:app/tx-ejb/ChildTxMethodExplicitEJBOverrideDefaults")
+    TxChecker baseTxMethodOverrideDefaults;
+    @EJB(lookup = "java:app/tx-ejb/ChildTxMethodExplicitEJBOverrideNoTxClass")
+    TxChecker baseTxMethodOverrideNoTxClass;
+    @EJB(lookup = "java:app/tx-ejb/ChildTxMethodExplicitEJBOverrideNoTxMethod")
+    TxChecker baseTxMethodOverrideNoTxMethod;
+    
     @Produces
     @TCT(TxCheckerType.EJB_BASE_NO_TX)
     public TxChecker produce_EJB_BASE_NO_TX() {
@@ -111,7 +124,44 @@ public class TxCheckerEJBsProducer {
     public TxChecker produce_EJB_BASE_TX_CLASS_EXPLICIT_OVERRIDE_NO_TX_METHOD() {
         return baseTxOverrideNoTxMethods;
     }
-//
+
+    @Produces
+    @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT)
+    public TxChecker produce_EJB_BASE_TX_METHOD_EXPLICIT() {
+        return baseTxMethod;
+    }
+
+    @Produces
+    @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_DEFAULTS)
+    public TxChecker produce_EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_DEFAULTS() {
+        return baseTxMethodNoOverrideDefaults;
+    }
+    
+    @Produces
+    @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_NO_TX_CLASS)
+    public TxChecker produce_EJB_BASE_TX_METHOD_EXPLICIT_NO_OVERRIDE_NO_TX_CLASS() {
+        return baseTxMethodNoOverrideNoTxClass;
+    }
+    
+    @Produces
+    @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_DEFAULTS)
+    public TxChecker produce_EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_DEFAULTS() {
+        return baseTxMethodOverrideDefaults;
+    }
+    
+    @Produces
+    @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_CLASS)
+    public TxChecker produce_EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_CLASS() {
+        return baseTxMethodOverrideNoTxClass;
+    }
+    
+    @Produces
+    @TCT(TxCheckerType.EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_METHOD)
+    public TxChecker produce_EJB_BASE_TX_METHOD_EXPLICIT_OVERRIDE_NO_TX_METHOD() {
+        return baseTxMethodOverrideNoTxMethod;
+    }
+    
+    //
 //    @Produces
 //    @TCT(TxCheckerType.ANY)
 //    public TxChecker produce(InjectionPoint ip) {
